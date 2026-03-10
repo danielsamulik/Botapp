@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Покупка инструкции</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            color: #f1f5f9;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 24px 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.6);
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5f3fc, #f0abfc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .badge {
+            background: rgba(255,255,255,0.05);
+            border-radius: 40px;
+            padding: 6px 14px;
+            font-size: 14px;
+            color: #94a3b8;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: fit-content;
+            margin: 0 auto 16px;
+        }
+        .price {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 20px;
+            margin: 16px 0;
+            border: 1px solid rgba(250, 204, 21, 0.2);
+            text-align: center;
+        }
+        .price span {
+            font-size: 52px;
+            font-weight: 800;
+            color: #facc15;
+            text-shadow: 0 0 20px rgba(250,204,21,0.3);
+        }
+        .price small {
+            font-size: 18px;
+            color: #cbd5e1;
+        }
+        .features {
+            list-style: none;
+            margin: 20px 0;
+        }
+        .features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 16px;
+            color: #e2e8f0;
+        }
+        .features li::before {
+            content: "✓";
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: rgba(34, 197, 94, 0.2);
+            border-radius: 50%;
+            color: #4ade80;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .btn {
+            border: none;
+            border-radius: 18px;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            border: none;
+            box-shadow: 0 8px 20px -5px rgba(124, 58, 237, 0.5);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            border: none;
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+        }
+        .footer-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #64748b;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 16px;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📘 100 способов заработка</h1>
+        <div class="badge">🔥 проверенные методы</div>
+        <div class="price">
+            <span>200</span><small> ₽</small>
+        </div>
+        <ul class="features">
+            <li>Реальные схемы 2025</li>
+            <li>YouTube Shorts + ИИ</li>
+            <li>Telegram-боты автопродажи</li>
+            <li>Криптоарбитраж для новичков</li>
+        </ul>
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="pay()">💳 Оплатить 200 руб</button>
+            <button class="btn btn-success" onclick="checkPayment()" id="checkBtn">✅ Я оплатил, проверить</button>
+            <button class="btn btn-secondary" onclick="Telegram.WebApp.close()">✖ Закрыть</button>
+        </div>
+        <div class="footer-note">
+            ⚡ Файл придёт в этот чат после оплаты
+        </div>
+    </div>
+
+    <script>
+        let tg = Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        let currentLabel = null;
+
+        function pay() {
+            let user = tg.initDataUnsafe?.user;
+            if (!user || !user.id) {
+                tg.showAlert("Не удалось определить пользователя");
+                return;
+            }
+
+            // Формируем уникальную метку платежа
+            currentLabel = `user${user.id}_${Date.now()}`;
+
+            let wallet = "4100119490943724";
+            let amount = 200;
+            let paymentUrl = `https://yoomoney.ru/quickpay/confirm.xml?receiver=${wallet}&sum=${amount}&label=${currentLabel}&quickpay-form=button&paymentType=AC`;
+
+            window.open(paymentUrl, '_blank');
+
+            tg.showPopup({
+                title: 'Оплата',
+                message: 'После перевода нажми «Я оплатил, проверить». Файл отправится в чат.',
+                buttons: [{type: 'ok'}]
+            });
+        }
+
+        function checkPayment() {
+            if (!currentLabel) {
+                tg.showAlert("Сначала нажми «Оплатить» и соверши перевод.");
+                return;
+            }
+
+            let btn = document.getElementById('checkBtn');
+            let originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading"></span> Проверка...';
+            btn.disabled = true;
+
+            // Отправляем запрос на твой сервер PythonAnywhere
+            fetch('https://Daniel8570.pythonanywhere.com/check-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ label: currentLabel })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'paid') {
+                    tg.showPopup({
+                        title: 'Успешно',
+                        message: 'Оплата подтверждена! Файл уже в чате.',
+                        buttons: [{type: 'ok'}]
+                    });
+                } else {
+                    tg.showPopup({
+                        title: 'Ожидание',
+                        message: 'Платёж ещё не обработан. Проверь историю и попробуй через минуту.',
+                        buttons: [{type: 'ok'}]
+                    });
+                }
+            })
+            .catch(err => {
+                tg.showAlert('Ошибка при проверке. Попробуй позже.');
+            })
+            .finally(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+  </html>
